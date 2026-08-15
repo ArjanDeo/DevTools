@@ -1,6 +1,9 @@
 import SwiftUI
+import AppKit
 
 struct MenuBarView: View {
+    @State private var copied = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("DevTools")
@@ -13,21 +16,37 @@ struct MenuBarView: View {
             }
 
             Button {
-                // Open JWT decoder
+                JWTDecodeView()
             } label: {
                 Label("JWT Decoder", systemImage: "key")
             }
 
             Button {
-                // Generate UUID
+                let uuidString = UUID().uuidString
+
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(
+                    uuidString,
+                    forType: .string
+                )
+
+                copied = true
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    copied = false
+                }
             } label: {
-                Label("UUID Generator", systemImage: "number")
+                Label(
+                    copied ? "UUID Copied!" : "Generate UUID",
+                    systemImage: copied ? "checkmark" : "number"
+                )
+                .foregroundStyle(copied ? .green : .primary)
             }
 
             Divider()
 
             Button("Open DevTools") {
-                // We'll connect this to your main window
+                // We'll connect this later
             }
 
             Button("Quit DevTools") {

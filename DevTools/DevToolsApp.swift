@@ -10,8 +10,9 @@ import SwiftUI
 @main
 struct DevToolsApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("DevTools", systemImage: "wrench.and.screwdriver") {
+            JWTDecodeView()
         }
+        .menuBarExtraStyle(.window)
     }
 }
